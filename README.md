@@ -1,4 +1,4 @@
-## CloudCat Category Controller Readme
+## CloudCat
 
 ### Overview
 This repository contains a Category Controller for managing categories in the CloudCat application. The controller is built using ASP.NET Core and Entity Framework Core for database operations.
