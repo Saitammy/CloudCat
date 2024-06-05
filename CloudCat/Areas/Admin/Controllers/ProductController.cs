@@ -2,6 +2,7 @@
 using CloudCat.Data.Repository.IRepository;
 using CloudCat.Models;
 using CloudCat.Models.ViewModels;
+using CloudCat.Utility;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -10,6 +11,7 @@ using System.Collections.Generic;
 namespace CloudCat.Areas.Admin.Controllers
 {
     [Area("Admin")]
+    [Authorize(Roles = SD.Role_Admin)]
     public class ProductController : Controller
     {
         private readonly IUnitOfWork _unitOfWork;
