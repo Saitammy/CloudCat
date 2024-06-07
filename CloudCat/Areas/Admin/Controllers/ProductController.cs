@@ -52,6 +52,20 @@ namespace CloudCat.Areas.Admin.Controllers
             }
 
         }
+        [HttpGet]
+        public IActionResult Search(string query)
+        {
+            if (string.IsNullOrEmpty(query))
+            {
+                return View(new List<Product>());
+            }
+
+            var searchResults = _unitOfWork.Product.GetAll()
+                                .Where(p => p.Title.Contains(query) || p.Author.Contains(query) || p.Description.Contains(query))
+                                .ToList();
+
+            return View(searchResults);
+        }
         [HttpPost]
         public IActionResult Upsert(ProductVM productVM, IFormFile? file)
         {
@@ -106,6 +120,7 @@ namespace CloudCat.Areas.Admin.Controllers
                 return View(productVM);
             }
         }
+
 
 
         #region API CALLS

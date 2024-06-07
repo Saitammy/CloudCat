@@ -19,6 +19,7 @@ namespace CloudCat.Areas.Customer.Controllers
 
         public IActionResult Index()
         {
+            //var products = from m in _unitOfWork.Product.
             IEnumerable<Product> productList = _unitOfWork.Product.GetAll(includeProperties: "Category");
             return View(productList);
         }
