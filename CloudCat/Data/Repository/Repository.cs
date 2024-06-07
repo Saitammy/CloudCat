@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using System.Globalization;
 using System.Linq.Expressions;
 using CloudCat.Models;
+using System.Linq;
 
 namespace CloudCat.Data.Repository
 {
@@ -40,19 +41,30 @@ namespace CloudCat.Data.Repository
 
         }
 
-        public IEnumerable<T> GetAll(string? includeProperties = null)
+        public IEnumerable<T> GetAll( Expression<Func<T, bool>>? filter = null,
+            Func<IQueryable<T>, IOrderedQueryable<T>>? orderBy = null,
+            string includeProperties = null
+            )
         {
             IQueryable<T> query = dbSet;
-            if (!string.IsNullOrEmpty(includeProperties))
+            if (filter != null)
             {
-                foreach (var includeProp in includeProperties
-                    .Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
+                query = query.Where(filter);
+            }
+            if (includeProperties != null)
+            {
+                foreach (var includeProperty in includeProperties.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
                 {
-                    query = query.Include(includeProp);
+                    query = query.Include(includeProperty);
                 }
+            }
+            if (orderBy != null)
+            {
+                return orderBy(query).ToList();
             }
             return query.ToList();
         }
+
 
         public void Remove(T entity)
         {

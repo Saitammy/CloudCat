@@ -21,11 +21,23 @@ namespace CloudCat.Areas.Admin.Controllers
             _unitOfWork = unitOfWork;
             _webHostEnvironment = webHostEnvironment;
         }
-        public IActionResult Index()
+        public IActionResult Index(string searchTerm)
         {
-            List<Product> objProductList = _unitOfWork.Product.GetAll(includeProperties: "Category").ToList();
+                IEnumerable<Product> objProductList;
+                if (!string.IsNullOrEmpty(searchTerm))
+                {
+                    objProductList = _unitOfWork.Product.GetAll(
+                        includeProperties: "Category",
+                        filter: p => p.Title.Contains(searchTerm) || p.Description.Contains(searchTerm)
+                    );
+                }
+                else
+                {
+                    objProductList = _unitOfWork.Product.GetAll(includeProperties: "Category").ToList();
+                }
 
-            return View(objProductList);
+                ViewBag.SearchTerm = searchTerm;
+                return View(objProductList);
         }
 
         public IActionResult Upsert(int? id)
