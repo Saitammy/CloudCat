@@ -46,6 +46,7 @@ namespace CloudCat.Data.Repository
             string includeProperties = null
             )
         {
+            //modified for search..
             IQueryable<T> query = dbSet;
             if (filter != null)
             {
